@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Soul Forge — Éveille ton zanpakutō</title>
+  <meta name="description" content="Éveille ton zanpakutō : monte en niveau, débloque ton Shikai puis ton Bankai, et garde ta progression avec une sauvegarde téléchargeable ou Discord.">
+  <meta name="theme-color" content="#05030c">
+  <meta property="og:url" content="__ORIGIN__/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Soul Forge">
+  <meta property="og:title" content="Soul Forge — Éveille ton zanpakutō">
+  <meta property="og:description" content="5 affinités, Shikai, Bankai, combats de Hollows et sauvegarde sur n’importe quel appareil.">
+  <meta property="og:image" content="__ORIGIN__/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Soul Forge : le kanji 魂 lumineux sur fond violet">
+  <meta property="og:locale" content="fr_FR">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&family=Noto+Serif+JP:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <noscript><p style="padding:24px;text-align:center">Soul Forge a besoin de JavaScript pour fonctionner.</p></noscript>
+  <canvas id="fx" aria-hidden="true"></canvas>
+
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">
+        <span class="brand-kanji">魂</span>
+        <div>
+          <h1>Soul Forge</h1>
+          <p>Éveille ton zanpakutō</p>
+        </div>
+      </div>
+      <div class="save-pill" id="saveStatus">Sauvegarde auto : actif</div>
+    </header>
+
+    <main class="grid">
+      <!-- PROFIL -->
+      <section class="card profile" data-kanji="魂">
+        <h2>Âme</h2>
+        <label class="field">
+          <span>Nom</span>
+          <input id="name" maxlength="20" autocomplete="off" spellcheck="false">
+        </label>
+        <div class="lvl-row">
+          <div class="lvl">Niv. <b id="lvl">1</b></div>
+          <div class="xp-txt" id="xpTxt">0 / 0</div>
+        </div>
+        <div class="bar"><div id="xpbar"></div></div>
+        <div class="stats">
+          <div><span>Reiatsu</span><b id="rei">0</b></div>
+          <div><span>Par seconde</span><b id="ps">0</b></div>
+          <div><span>Puissance</span><b id="pow">0</b></div>
+          <div><span>Victoires</span><b id="wins">0</b></div>
+        </div>
+        <button class="orb" id="orb" aria-label="Méditer pour gagner du reiatsu">
+          <span class="orb-core"></span>
+          <span class="orb-label">Méditer</span>
+          <span class="orb-sub" id="orbSub">+1 reiatsu</span>
+        </button>
+        <p class="hint">Clique ou appuie sur <kbd>Espace</kbd></p>
+      </section>
+
+      <!-- ZANPAKUTO -->
+      <section class="card zan" id="zanCard" data-kanji="刀">
+        <h2>Zanpakutō</h2>
+        <div id="zanBody"></div>
+      </section>
+
+      <!-- ENTRAÎNEMENT -->
+      <section class="card train" data-kanji="修">
+        <h2>Entraînement</h2>
+        <div id="upgrades" class="upgrades"></div>
+      </section>
+
+      <!-- COMBAT -->
+      <section class="card fight" data-kanji="戦">
+        <h2>Combat</h2>
+        <div class="enemy" id="enemy">
+          <div class="enemy-sigil" aria-hidden="true">虚</div>
+          <div class="enemy-name" id="enemyName">—</div>
+          <div class="enemy-pow" id="enemyPow">Puissance ?</div>
+        </div>
+        <button class="btn primary big" id="fightBtn">Affronter un Hollow</button>
+        <ul class="log" id="log"></ul>
+      </section>
+
+      <!-- SAUVEGARDE -->
+      <section class="card save" data-kanji="記">
+        <h2>Sauvegarde</h2>
+        <p class="muted">Ta progression est enregistrée automatiquement dans ce navigateur. Télécharge un fichier pour la garder en sécurité ou la reprendre ailleurs.</p>
+        <div class="btn-row">
+          <button class="btn primary" id="expBtn">Télécharger la sauvegarde</button>
+          <button class="btn" id="impBtn">Charger un fichier</button>
+          <input type="file" id="impFile" accept=".json,application/json" hidden>
+        </div>
+        <div class="code-box">
+          <div class="btn-row">
+            <button class="btn" id="codeBtn">Copier le code</button>
+            <button class="btn" id="codeLoadBtn">Charger un code</button>
+          </div>
+          <textarea id="codeArea" rows="3" placeholder="Colle ici un code de sauvegarde (SF1.…)" spellcheck="false"></textarea>
+        </div>
+        <div class="code-box discord-box" id="discordBox">
+          <h3>Sauvegarde Discord</h3>
+          <p class="muted" id="discordInfo">Envoie ta progression dans le salon Discord du jeu et reçois un code pour la restaurer plus tard, sur n’importe quel appareil. Garde ce code précieusement : sans lui, personne ne peut relire ta sauvegarde.</p>
+          <div class="btn-row">
+            <button class="btn primary" id="dcSendBtn" disabled>Envoyer sur Discord</button>
+            <button class="btn" id="dcLoadBtn" disabled>Importer depuis Discord</button>
+          </div>
+          <input type="text" id="dcCode" placeholder="Code Discord (SFD-…)" autocomplete="off" spellcheck="false" maxlength="60">
+        </div>
+        <button class="btn danger" id="resetBtn">Réinitialiser</button>
+      </section>
+    </main>
+
+    <footer>Fan project non officiel · Les zanpakutō présentés sont des créations originales.</footer>
+  </div>
+
+  <!-- Overlay de libération -->
+  <div class="release" id="release" aria-live="assertive">
+    <div class="release-inner">
+      <div class="release-type" id="relType"></div>
+      <div class="release-kanji" id="relKanji"></div>
+      <div class="release-cmd" id="relCmd"></div>
+      <div class="release-name" id="relName"></div>
+    </div>
+  </div>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+  <script src="app.js"></script>
+  <script src="session.js"></script>
+</body>
+</html>

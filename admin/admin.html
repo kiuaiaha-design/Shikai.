@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin — Soul Forge</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&family=Noto+Serif+JP:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+  <div class="wrap adm">
+    <header class="top">
+      <div class="brand">
+        <span class="brand-kanji">魂</span>
+        <div><h1>Panel admin</h1><p id="who">Chargement…</p></div>
+      </div>
+      <div class="user-chip">
+        <a class="btn small" href="/">Retour au jeu</a>
+        <form method="post" action="/auth/logout" style="margin:0"><button class="btn small" type="submit">Déconnexion</button></form>
+      </div>
+    </header>
+    <nav class="tabs" id="tabs" role="tablist"></nav>
+    <main id="view" aria-live="polite"></main>
+  </div>
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+  <script src="/admin/admin.js"></script>
+</body>
+</html>

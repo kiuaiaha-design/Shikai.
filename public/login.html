@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Connexion — Soul Forge</title>
+  <meta name="description" content="Connecte-toi avec Discord pour éveiller ton zanpakutō.">
+  <meta name="theme-color" content="#05030c">
+  <meta property="og:url" content="__ORIGIN__/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Soul Forge">
+  <meta property="og:title" content="Soul Forge — Éveille ton zanpakutō">
+  <meta property="og:description" content="5 affinités, Shikai, Bankai, combats de Hollows. Connexion avec Discord.">
+  <meta property="og:image" content="__ORIGIN__/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&family=Noto+Serif+JP:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <main class="login">
+    <section class="card" data-kanji="魂">
+      <div class="login-kanji">魂</div>
+      <h1>Soul Forge</h1>
+      <p class="muted">Éveille ton zanpakutō : Shikai, Bankai, combats de Hollows.<br>Connecte-toi avec ton compte Discord pour jouer.</p>
+      <p class="login-err" id="err" role="alert" hidden></p>
+      <a class="btn primary big" href="/auth/login">Se connecter avec Discord</a>
+      <p class="hint">Nous ne lisons que ton pseudo et ton avatar (aucun mot de passe, aucun serveur).</p>
+    </section>
+  </main>
+  <script src="login.js"></script>
+</body>
+</html>
